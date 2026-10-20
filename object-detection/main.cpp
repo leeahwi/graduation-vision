@@ -121,7 +121,13 @@ Mat post_process(Mat &input_image, vector<Mat> &outputs, const vector<string> &c
 int main(int argc, char const *argv[]){
     // Load class list.
     vector<string> class_list;
-    ifstream ifs("/Users/hwiah/Documents/tutorial/project2/coco.names");
+    const string classes_path = argc > 1 ? argv[1] : "../coco.names";
+    const string model_path = argc > 2 ? argv[2] : "../yolov5s.onnx";
+    ifstream ifs(classes_path);
+    if (!ifs.is_open()) {
+        cerr << "Could not open class list: " << classes_path << endl;
+        return 1;
+    }
     string line;
     while (getline(ifs, line))
         class_list.push_back(line);
@@ -131,7 +137,7 @@ int main(int argc, char const *argv[]){
     if(!cap.isOpened())return -1;
     // Load model.
     Net net;
-    net = readNet("/Users/hwiah/Documents/tutorial/project2/yolov5s.onnx");
+    net = readNet(model_path);
 
     for (;;){
         cap >> frame;

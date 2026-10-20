@@ -73,9 +73,6 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
- INCLUDE_DIRS src
- LIBRARIES hg_lineDetection
- LIBRARIES opencv
  CATKIN_DEPENDS cv_bridge image_transport roscpp rospy sensor_msgs std_msgs
 )
 
@@ -115,10 +112,26 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-# catkin_install_python(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+catkin_install_python(PROGRAMS
+  src/rosLaneDetection.py
+  src/rosLaneDetectionDiff.py
+  src/rosLaneDetectionHough.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+# Keep the local helper import available to catkin's devel-space node relays.
+file(MAKE_DIRECTORY "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_BIN_DESTINATION}")
+configure_file(src/ransac_1d.py
+  "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_BIN_DESTINATION}/ransac_1d.py"
+  COPYONLY
+)
+
+install(FILES src/ransac_1d.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+install(DIRECTORY src/testImage
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 #add_executable(birdeyebiew src/birdeyebiew.py)
 #target_link_libraries(birdeyebiew ${catkin_LIBRARIES})

@@ -1,0 +1,53 @@
+name: Verify graduation projects
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-checks:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Check Python syntax and ROS XML
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          root = Path("ros-lane-detection")
+          for path in sorted(root.glob("src/*.py")):
+              compile(path.read_bytes(), str(path), "exec")
+              print("Python syntax:", path)
+          for path in [root / "package.xml", *sorted(root.glob("launch/*.launch"))]:
+              ET.parse(path)
+              print("XML syntax:", path)
+          PYTHON
+  cpp-build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Install existing project dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends cmake g++ libopencv-dev libgsl-dev
+      - name: Configure and build both C++ programs
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel 2
+      - name: Check unavailable input fails without camera access
+        run: |
+          python3 - <<'PYTHON'
+          import subprocess
+          checks = [
+              ["./build/lane-detection/Live_LaneDetection", "/nonexistent/graduation-input.mp4"],
+              ["./build/object-detection/Live_ObjectDetection", "/nonexistent/coco.names"],
+          ]
+          for command in checks:
+              result = subprocess.run(command, stdin=subprocess.DEVNULL, timeout=15)
+              assert result.returncode == 1, (command, result.returncode)
+              print("Missing input handled:", command[0])
+          PYTHON

@@ -1,0 +1,11 @@
+# Local build output and generated detection results
+build/
+devel/
+install/
+log/
+logs/
+__pycache__/
+*.py[cod]
+.DS_Store
+live.avi
+img_annota1ted.jpg

@@ -1,33 +1,15 @@
-cmake_minimum_required(VERSION 3.0.0)
-#defines the mnimum version of CMake required
+cmake_minimum_required(VERSION 3.16)
+project(Live_LaneDetection VERSION 0.1.0 LANGUAGES CXX)
 
-project(Live_LaneDetection VERSION 0.1.0)
-
-set(CMAKE_CXX_STANDARE 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-include(CTest)
-enable_testing()
-
-set(OpenCV_DIR /Users/hwiah/Documents/opencv_4/install/lib/cmake/opencv4)
-find_package(OpenCV REQUIRED)
-
-include_directories(${OpenCV_INCLUDE_DIRS})
-
-if(MSVC)
-   add_compile_options(/W4)
-else()
-   add_compile_options(-Wall -Wextra -pedantic)
-endif()
- 
+find_package(OpenCV REQUIRED COMPONENTS core imgproc imgcodecs videoio highgui)
 find_package(GSL REQUIRED)
-link_libraries(GSL::gsl GSL::gslcblas)
 
 add_executable(Live_LaneDetection main.cpp)
-
-target_link_libraries(Live_LaneDetection ${OpenCV_LIBS})
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-
-include(CPack)
+target_compile_features(Live_LaneDetection PRIVATE cxx_std_17)
+target_include_directories(Live_LaneDetection PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(Live_LaneDetection PRIVATE ${OpenCV_LIBS} GSL::gsl GSL::gslcblas)
+if(MSVC)
+  target_compile_options(Live_LaneDetection PRIVATE /W4)
+else()
+  target_compile_options(Live_LaneDetection PRIVATE -Wall -Wextra -pedantic)
+endif()

@@ -41,7 +41,7 @@ centerArray = []
 left_bias, right_bias = 330,350
 
 bridge = CvBridge()
-tempImage = cv2.imread("/home/jetsontx2/Self-Driving-Delivery-Robot/src/hg_lineDetection/src/testImage/black.jpeg")
+tempImage = cv2.imread(os.path.join(os.path.dirname(os.path.abspath(__file__)), "testImage", "black.jpeg"))
 rosTempImage = bridge.cv2_to_imgmsg(tempImage)
 
 # # rosRawImg = rosTempImage
@@ -655,10 +655,10 @@ def imageCallback(msg):
     #sliding
     isMinus = False
     if centerPub < 0:
-	isMinus = True
+        isMinus = True
 
     if centerPub > 200: 
-	centerPub=200
+        centerPub=200
     if centerPub < -200: 
         centerPub=-200
         isMinus = True

@@ -320,13 +320,13 @@ void draw_line(Mat &img_line, vector<Vec4i> lines)
 
 
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
 	char buf[256];
 	Mat img_bgr, img_gray, img_edges, img_hough, img_annotated;
 
 
-    VideoCapture videoCapture("../challenge.mp4");
+    VideoCapture videoCapture(argc > 1 ? argv[1] : "../challenge.mp4");
 	//VideoCapture videoCapture("../KoreaTechLaneDetectionExample1.mp4");
 
     //VideoCapture videoCapture("../solidWhiteRight.mp4");
