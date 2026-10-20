@@ -14,7 +14,29 @@
 | [`object-detection/`](object-detection/) | 웹캠 영상에서 객체 검출·라벨 표시 | C++17, OpenCV DNN, YOLOv5s ONNX / 카메라 0 |
 | [`ros-lane-detection/`](ros-lane-detection/) | ROS 카메라 영상에서 차선과 주행 방향 계산 | Python, ROS 1, OpenCV, NumPy, Matplotlib / 이미지 토픽 |
 
-차선 인식은 색상 필터, ROI, Canny/Hough 변환과 선형 회귀를 사용합니다. ROS 모듈에는 기본·Diff·Hough 변형이 있으며, 객체 인식에는 기존 `yolov5s.onnx`와 COCO 클래스 목록을 함께 보관합니다.
+차선 인식은 색상 필터, ROI, Canny/Hough 변환과 선형 회귀를 사용합니다. ROS 모듈에는 기본·Diff·Hough 변형이 있으며, 객체 인식에는 기존 `yolov5s.onnx`와 COCO 클래스 목록을 사용합니다. 원본 영상과 모델은 아래 릴리스에서 내려받습니다.
+
+## 배포 파일 다운로드
+
+**[v1.0.0 Releases](https://github.com/leeahwi/graduation-vision/releases/tag/v1.0.0)**에서 내려받을 수 있습니다.
+
+| 파일 | 내용 |
+| --- | --- |
+| `graduation-vision-ubuntu-22.04-x86_64.tar.gz` | Ubuntu 22.04 x86_64용 C++ 실행 파일 2개, 설치·실행 안내, 동적 라이브러리 목록 |
+| `graduation-vision-sample-videos.tar.gz` | 원본 실험 영상 5개 |
+| `graduation-vision-yolov5-assets.tar.gz` | 기존 ONNX 모델과 COCO 클래스 목록 |
+| `graduation-vision-ros-catkin-source.tar.gz` | ROS 1/catkin 패키지 소스와 실행 안내 |
+| `SHA256SUMS`, `data-manifest.json` | 배포 파일 및 원본 입력 파일의 SHA-256 |
+
+실행 파일은 시스템 OpenCV/GSL에 동적으로 연결됩니다. Ubuntu 22.04 x86_64에서 `sudo apt-get install libopencv-dev libgsl-dev`로 준비하고, 실행 파일 압축 안의 README를 따라 실행하세요. 다른 운영체제·CPU에서는 소스로 빌드합니다. ROS는 소스로 제공하며 별도 catkin 환경이 필요합니다.
+
+소스 저장소에서 영상과 모델을 복원하려면 Python 3으로 다음 명령을 실행합니다. 저장된 SHA-256으로 압축 파일과 각 원본 파일을 검사한 뒤 기존 경로에 복원합니다.
+
+```bash
+python3 scripts/fetch-release-data.py
+```
+
+수동으로 영상·모델 압축을 저장소 루트에 풀어도 같은 경로가 만들어집니다. 파일은 Git 현재 트리에서 분리했으며 과거 커밋과 출처 이력에는 그대로 남아 있습니다. 따라서 전체 Git 이력을 clone할 때의 크기는 줄어들지 않습니다.
 
 ## C++ 프로젝트 빌드
 
@@ -26,6 +48,7 @@ sudo apt-get install build-essential cmake libopencv-dev libgsl-dev
 
 git clone https://github.com/leeahwi/graduation-vision.git
 cd graduation-vision
+python3 scripts/fetch-release-data.py
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel 2
 ```
@@ -42,7 +65,7 @@ OpenCV를 직접 설치했다면 구성 명령에 `-DOpenCV_DIR=/path/to/opencv/
 
 첫 번째 인자로 다른 영상 경로를 지정할 수 있습니다. 인자를 생략하면 원본과 같은 `../challenge.mp4`를 사용합니다. 결과는 실행 폴더의 `live.avi`와 `img_annota1ted.jpg`에 저장되고 GUI 창에 표시됩니다. 종료는 `ESC`입니다. 영상 디코더와 XVID 인코더가 필요합니다.
 
-기존 실험 자료 `KoreaTechLaneDetectionExample1.mp4`, `P1_example.mp4`, `raw-lines-example.mp4`, `solidWhiteRight.mp4`도 `lane-detection/`에 보존했습니다.
+기존 실험 자료 `KoreaTechLaneDetectionExample1.mp4`, `P1_example.mp4`, `raw-lines-example.mp4`, `solidWhiteRight.mp4`도 영상 릴리스 압축에 보존했으며, 복원하면 `lane-detection/`에 생성됩니다.
 
 ### 웹캠 객체 인식
 
@@ -89,8 +112,8 @@ roslaunch hg_lineDetection lineDetection.launch
 
 - 세 저장소의 원본 커밋 9개를 병합 이력 안에 보존했습니다. 출처별 기준 커밋은 [`docs/source-repositories.json`](docs/source-repositories.json)에 기록했습니다.
 - 인식 알고리즘과 임계값은 유지했습니다. 개인 컴퓨터 절대 경로, CMake 빌드 설정, ROS 실행 파일 설치, 기존 들여쓰기 오류를 정리했습니다.
-- 영상·모델·이미지·클래스 목록을 보존했고, `build/`와 `.pyc` 같은 생성 파일은 현재 파일 목록에서 제외했습니다. 이전 파일은 Git 이력에 남아 있습니다.
-- GitHub Actions는 C++ 두 프로그램의 Ubuntu 빌드, 없는 입력에 대한 종료 동작, Python 문법과 ROS XML 구문을 확인합니다. 실제 검사 결과는 위 배지의 실행 기록을 확인하세요.
+- 영상·모델은 체크섬을 포함한 릴리스 자산에 보존하고 이미지·클래스 목록은 소스에도 유지했습니다. 또한 `build/`와 `.pyc` 같은 생성 파일은 현재 파일 목록에서 제외했습니다. 이전 파일은 Git 이력에 남아 있습니다.
+- GitHub Actions는 C++ 두 프로그램의 Ubuntu 빌드, 없는 입력에 대한 종료 동작, Python 문법과 ROS XML 구문, 원본 데이터 체크섬을 확인하고 배포 압축과 체크섬을 생성합니다. `v*` 태그를 push하면 초안 릴리스를 준비하며, 영상·모델은 변경하지 않은 v1.0.0 기준 자산을 재사용합니다. 실제 검사 결과는 위 배지의 실행 기록을 확인하세요.
 - GUI 영상 재생, 웹캠 추론, ROS/catkin 빌드와 실제 로봇 연결은 이 통합 과정에서 검증하지 않았습니다. 기존 Python 2/3 나눗셈 차이, 고정 영상 크기와 검출 개수 등의 제약도 남아 있습니다.
 
 ## 출처와 라이선스

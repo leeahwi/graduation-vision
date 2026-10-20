@@ -9,3 +9,10 @@ __pycache__/
 .DS_Store
 live.avi
 img_annota1ted.jpg
+
+# Original large input data is restored from checksum-verified release archives.
+lane-detection/*.mp4
+object-detection/yolov5s.onnx
+release-data/
+dist/
+release-smoke/

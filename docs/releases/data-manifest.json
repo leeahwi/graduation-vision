@@ -1,0 +1,21 @@
+{
+  "graduation-vision-sample-videos.tar.gz": {
+    "sha256": "5bd271861f3e58f00cb39c6bd2bde33be2c437fef7de5c2071283313f114dfe5",
+    "bytes": 80194455,
+    "files": {
+      "lane-detection/KoreaTechLaneDetectionExample1.mp4": "1e9eef864b6627d25475ce2887e505075e019a1c6260421d344d4cc02296d117",
+      "lane-detection/P1_example.mp4": "4a33bd077f0cb7866ec76ae2a3b4f14f0e9ff5fb745da522f8ef2eef66f2c307",
+      "lane-detection/challenge.mp4": "e91ddd5dcae65c2570bb2ee72d9b268c296f6893bf3eb68e7976b843e0e53a47",
+      "lane-detection/raw-lines-example.mp4": "11a4e9b268359bf3ac0e2fe2ebd3ecad0906de67cdc87b36ef4c4670140fefff",
+      "lane-detection/solidWhiteRight.mp4": "2d8e14b46fe89afbc8ad1f718685cf09b83e85a324095031c38186a9f0535417"
+    }
+  },
+  "graduation-vision-yolov5-assets.tar.gz": {
+    "sha256": "fbbcc2952358082491c0f5581e8a9fb5b09e26028a89a67b1fce908c4a67c0f4",
+    "bytes": 24714541,
+    "files": {
+      "object-detection/yolov5s.onnx": "dc4cb6a204e2ce5917b896f3b2a9b4f66647f569468f5f7855fd7d87e9f3b60e",
+      "object-detection/coco.names": "33c77761e124cc74911346865e3bc1219b87c2db7d0f106e3376bf5ef3785933"
+    }
+  }
+}

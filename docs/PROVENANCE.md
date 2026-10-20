@@ -24,3 +24,9 @@
 차선 인식 `main.cpp`에는 [georgesung/road_lane_line_detection](https://github.com/georgesung/road_lane_line_detection)과 [webnautes 글](https://webnautes.tistory.com/1186)이 원본·수정 출처로 기재되어 있습니다. 이 표기를 유지합니다.
 
 YOLOv5s 모델과 영상 파일은 원본 저장소에 포함된 파일을 그대로 가져왔습니다. 모델 변환 버전이나 모든 영상의 최초 제작자는 원본 자료만으로 확인하지 못했습니다. 전체 저장소에 적용할 새 라이선스는 추가하지 않았습니다.
+
+## v1.0.0 배포 분리
+
+원본 영상 5개와 ONNX 모델은 릴리스 압축으로 이동했습니다. 삭제 전 로컬 보존본과 GitHub 초안 릴리스에 업로드한 압축을 다시 내려받아 SHA-256 및 각 파일을 대조했습니다. 원래 파일은 과거 커밋에 계속 남아 있습니다. `docs/releases/data-manifest.json`에 압축·개별 파일 해시를 기록했고, `scripts/fetch-release-data.py`로 기존 경로에 복원합니다. COCO 클래스 목록은 소스와 모델 압축에 함께 보존했습니다.
+
+빌드·배포 구성과 문서 외의 알고리즘 소스는 이번 배포 준비에서 변경하지 않았습니다.
